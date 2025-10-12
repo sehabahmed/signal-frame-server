@@ -25,7 +25,7 @@ export const TldrNewsSource: INewsSource = {
       }));
     } catch (error) {
       console.error("TLDR fetch error:", error);
-      return [];∆
+      return [];
     }
   },
 };
