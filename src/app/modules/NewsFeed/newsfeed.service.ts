@@ -1,3 +1,4 @@
+import { QueryBuilder } from "../../builder/QueryBuilder";
 import { TNewsItem } from "./newsfeed.interface";
 import { NewsFeed } from "./newsfeed.model";
 import { NewsSourceFactory } from "./sources/NewsSourceFactory";
@@ -36,4 +37,44 @@ const fetchAllNews = async (): Promise<void> => {
   console.log(`Fetched ${totalFetched} news items from all sources`);
 };
 
+// Get filtered news feed with pagination and sorting
 
+const getNewsFeed = async (
+  query: Record<string, unknown>
+): Promise<TNewsItem[]> => {
+  const newsQuery = new QueryBuilder(NewsFeed.find(), query)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  return await newsQuery.modelQuery;
+};
+
+// Get News by specific source
+const getNewsBySource = async (
+  source: string,
+  limit = 20
+): Promise<TNewsItem[]> => {
+  return await NewsFeed.find({ source }).sort({ publishedAt: -1 }).limit(limit);
+};
+
+// Delete news older than specified days
+const deleteOldNews = async (daysOld: 30): Promise<void> => {
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - daysOld);
+
+  const result = await NewsFeed.deleteMany({
+    fetchedAt: { $lt: cutoffDate },
+  });
+
+  console.log(`Deleted ${result.deletedCount} old news items`);
+};
+
+export const NewsFeedService = {
+  fetchAllNews,
+  saveNewsItems,
+  getNewsFeed,
+  getNewsBySource,
+  deleteOldNews,
+};
