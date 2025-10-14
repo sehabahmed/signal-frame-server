@@ -1,5 +1,6 @@
 import { TNewsItem } from "./newsfeed.interface";
 import { NewsFeed } from "./newsfeed.model";
+import { NewsSourceFactory } from "./sources/NewsSourceFactory";
 
 // Helper function to save news items
 const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
@@ -21,5 +22,18 @@ const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
 const fetchAllNews = async (): Promise<void> => {
   const sources = NewsSourceFactory.createAllSources();
 
-  const results = await Promise.allSettled()
+  const results = await Promise.allSettled(
+    sources.map((source) => source.fetch())
+  );
+
+  let totalFetched = 0;
+  for (const result of results) {
+    if (result.status === "fulfilled") {
+      await saveNewsItems(result.value);
+      totalFetched += result.value.length;
+    }
+  }
+  console.log(`Fetched ${totalFetched} news items from all sources`);
 };
+
+
