@@ -3,6 +3,21 @@ import { TNewsItem } from "./newsfeed.interface";
 import { NewsFeed } from "./newsfeed.model";
 import { NewsSourceFactory } from "./sources/NewsSourceFactory";
 
+// =================================
+// POPULARITY CALCULATION UTILITIES
+// =================================
+
+/**
+ * Calculate popularity score based on multiple factors
+ * Score range: 0-100
+ * 
+ * Factors considered:
+ * 1. Source engagement (upvotes, comments, shares) - 40%
+ * 2. Internal engagement (views, clicks, bookmarks) - 30%
+ * 3. Recency (time decay factor) - 20%
+ * 4. Author reputation - 10%
+ */
+
 // Helper function to save news items
 const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
   for (const item of items) {
