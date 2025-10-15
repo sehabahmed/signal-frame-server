@@ -4,6 +4,7 @@ import httpStatus from "http-status";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 import notFound from "./app/middlewares/notFound";
 import router from "./app/routes";
+import { startNewsFeedScheduler } from "./app/jobs/newsFeedScheduler";
 
 const app: Application = express();
 
@@ -21,6 +22,9 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
     message: "Welcome to Kickoff Node TS",
   });
 });
+
+// Initialize news feed scheduler
+startNewsFeedScheduler();
 
 //global error handler
 app.use(globalErrorHandler);
