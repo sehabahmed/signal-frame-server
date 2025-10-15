@@ -52,12 +52,12 @@ const newsFeedSchema = new Schema<TNewsItem>(
       lastCalculated: { type: Date, default: Date.now },
     },
     sourceMatrics: {
-        hackerNewsScore: Number,
-        hackerNewsComments: Number,
-        twitterLikes: Number,
-        twitterRetweets: Number,
-        twitterReplies: Number,
-    }
+      hackerNewsScore: Number,
+      hackerNewsComments: Number,
+      twitterLikes: Number,
+      twitterRetweets: Number,
+      twitterReplies: Number,
+    },
   },
   { timestamps: true }
 );
@@ -65,5 +65,7 @@ const newsFeedSchema = new Schema<TNewsItem>(
 //Index for better query performance
 newsFeedSchema.index({ source: 1, publishedAt: -1 });
 newsFeedSchema.index({ fetchedAt: -1 });
+newsFeedSchema.index({ "popularity.score": -1 });
+newsFeedSchema.index({ source: 1, "popularity.score": -1 });
 
 export const NewsFeed = model<TNewsItem>("NewsFeed", newsFeedSchema);
