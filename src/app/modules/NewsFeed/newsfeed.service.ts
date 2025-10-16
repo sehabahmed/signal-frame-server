@@ -18,6 +18,30 @@ import { NewsSourceFactory } from "./sources/NewsSourceFactory";
  * 4. Author reputation - 10%
  */
 
+const calculatePopularityScore = (news: TNewsItem): number => {
+    const now = new Date().getTime();
+    const publishedTime = new Date(news.publishedAt).getTime();
+    const ageInHours = (now - publishedTime) / (1000 * 60 * 60 );
+
+    // 1. source Engagement Score (0-40 points)
+    const sourceScore = calculateSourceEngagement(news);
+
+    // 2. Internal Engagement Score (0-30 points)
+    const internalScore = calculateInternalEngagement(news);
+
+    // 3. Recency Score (0-20 points) - Time decay
+    const recencyScore = calculateRecencyScore(ageInHours);
+
+    // 4. Author Reputation Score (0-10 points)
+    const authorScore = calculateAuthorScore(news);
+
+    const totalScore = sourceScore + internalScore + recencyScore + authorScore;
+
+    return Math.min(Math.round(totalScore), 100);
+}
+
+
+
 // Helper function to save news items
 const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
   for (const item of items) {
