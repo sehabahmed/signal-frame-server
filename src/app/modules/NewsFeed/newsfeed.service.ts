@@ -40,7 +40,22 @@ const calculatePopularityScore = (news: TNewsItem): number => {
     return Math.min(Math.round(totalScore), 100);
 }
 
+// Calculate engagemenet  from external sources
 
+const calculateSourceEngament = (news: TNewsItem): number => {
+    const { upvotes = 0, comments = 0, shares = 0 } = news.popularity || {};
+
+    // Differenet sources have different engagement scales
+
+    let  normalizedScore = 0;
+
+    switch (news.source) {
+        case 'hackernews': 
+        // HN: High upvotes (100+) and comments (50+) are very popular
+        normalizedScore = Math.min((upvotes / 10) + (comments / 5 ), 40);
+        break
+    }
+}
 
 // Helper function to save news items
 const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
