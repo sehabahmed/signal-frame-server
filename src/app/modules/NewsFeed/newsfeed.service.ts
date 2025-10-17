@@ -89,6 +89,22 @@ const calculateInternalEngagement = (news: TNewsItem): number => {
     return Math.min(viewScore + clickScore + bookmarkScore + ctrBonus, 30);
 }
 
+
+// calculate recency score with time decay
+const calculateRecencyScore = (ageInHours: number): number => {
+    // Exponential decay formula
+    // Fresh content (< 6 hours) gets full score
+    // After 24 hours, score drops to ~50%
+    // After 72 hours, score drops to ~20%
+
+    if (ageInHours < 6) return 20;
+    if (ageInHours < 24) return 15;
+    if (ageInHours < 48) return 10;
+    if (ageInHours < 72) return 5;
+    return 2;
+}
+
+
 // Helper function to save news items
 const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
   for (const item of items) {
