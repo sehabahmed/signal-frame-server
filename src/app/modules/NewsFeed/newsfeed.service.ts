@@ -53,8 +53,40 @@ const calculateSourceEngament = (news: TNewsItem): number => {
         case 'hackernews': 
         // HN: High upvotes (100+) and comments (50+) are very popular
         normalizedScore = Math.min((upvotes / 10) + (comments / 5 ), 40);
-        break
+        break;
+
+        case 'twitter':
+      // Twitter: Likes (1000+) and retweets (100+) indicate popularity
+      normalizedScore = Math.min((upvotes / 100) + (shares / 10) + (comments / 20), 40)
+      break;
+  
+      case 'tldr': 
+      // TLDR: Curated content, base score
+      normalizedScore = 20;
+      break;
+
+      default: 
+      normalizedScore = (upvotes / 50) + (comments / 10)  + (shares / 5);
     }
+    
+    return Math.min(normalizedScore, 40)
+}
+
+
+
+// Calculate internal user engagement
+const calculateInternalEngagement = (news: TNewsItem): number => {
+    const { views = 0, clicks = 0, bookmarks = 0 } = news.popularity || {};
+
+    // CTR (click-Through Rate) is important
+    const ctr = views > 0 ? clicks / views : 0;
+
+    const viewScore = Math.min(views / 10, 10);
+    const clickScore = Math.min(clicks / 5, 10);
+    const bookmarkScore = Math.min(bookmarks * 2, 5);
+    const ctrBonus = ctr * 5;
+
+    return Math.min(viewScore + clickScore + bookmarkScore + ctrBonus, 30);
 }
 
 // Helper function to save news items
