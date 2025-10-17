@@ -111,6 +111,31 @@ const calculateAuthorScore = (news: TNewsItem) => {
   return news.author ? 5 : 0;
 };
 
+// Update popularity scores for all news items
+const updatePopularityScores = async (): Promise<void> => {
+  const news = await NewsFeed.find({});
+
+  let updated = 0;
+
+  for (const item of news) {
+    const newScore = calculatePopularityScore(item);
+
+    await NewsFeed.updateOne(
+      { _id: item._id },
+      {
+        $set: {
+          "popularity.score": newScore,
+          "popularity.lastCalculated": new Date(),
+        },
+      }
+    );
+
+    updated++;
+  }
+
+  console.log(`Updated popularity scores for ${updated} news items`);
+};
+
 // Helper function to save news items
 const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
   for (const item of items) {
