@@ -136,6 +136,20 @@ const updatePopularityScores = async (): Promise<void> => {
   console.log(`Updated popularity scores for ${updated} news items`);
 };
 
+// =========================
+// News Tracking Utilities
+// =========================
+
+// Track when a user views a news item
+const trackView = async (newsId: string): Promise<void> => {
+  await NewsFeed.updateOne(
+    { _id: newsId },
+    { $inc: { "popularity.views": 1 } }
+  );
+};
+
+// Track when a user clicks on a news item
+
 // Helper function to save news items
 const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
   for (const item of items) {
