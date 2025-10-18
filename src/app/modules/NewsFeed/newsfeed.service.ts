@@ -167,7 +167,13 @@ const trackBookmark = async (
   );
 };
 
-
+// track when a user shares a news item
+const trackShare = async (newsId: string): Promise<void> => {
+  await NewsFeed.updateOne(
+    { _id: newsId },
+    { $inc: { "popularity.shares": 1 } }
+  );
+};
 
 // Helper function to save news items
 const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
