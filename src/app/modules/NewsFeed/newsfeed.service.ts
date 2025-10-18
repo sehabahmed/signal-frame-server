@@ -156,6 +156,19 @@ const trackClick = async (newsId: string): Promise<void> => {
   );
 };
 
+// Track when a user bookmarks a news item
+const trackBookmark = async (
+  newsId: string,
+  isBookmarked: boolean
+): Promise<void> => {
+  await NewsFeed.updateOne(
+    { _id: newsId },
+    { $inc: { "popularity.bookmarks": isBookmarked ? 1 : -1 } }
+  );
+};
+
+
+
 // Helper function to save news items
 const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
   for (const item of items) {
