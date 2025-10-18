@@ -179,6 +179,20 @@ const trackShare = async (newsId: string): Promise<void> => {
 const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
   for (const item of items) {
     try {
+        //calculate initial popularity score
+        item.popularity = item.popularity || {
+            score: 0,
+            views: 0,
+            clicks: 0,
+            shares: 0,
+            bookmarks: 0,
+            comments: 0,
+            upvotes: 0,
+            lastCalculated: new Date(),
+        }
+
+        item.popularity.score = calculatePopularityScore(item)
+
       await NewsFeed.updateOne(
         { externalId: item.externalId, source: item.source },
         item,
