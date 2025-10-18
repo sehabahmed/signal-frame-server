@@ -149,6 +149,12 @@ const trackView = async (newsId: string): Promise<void> => {
 };
 
 // Track when a user clicks on a news item
+const trackClick = async (newsId: string): Promise<void> => {
+  await NewsFeed.updateOne(
+    { _id: newsId },
+    { $inc: { "popularity.clicks": 1 } }
+  );
+};
 
 // Helper function to save news items
 const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
