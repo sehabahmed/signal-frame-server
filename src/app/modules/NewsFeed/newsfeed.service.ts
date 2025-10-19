@@ -302,6 +302,8 @@ export const NewsFeedService = {
   trackBookmark,
   trackShare,  
   fetchAllNews,
+  getPopularNews,
+  getTrendingNews,
   saveNewsItems,
   getNewsFeed,
   getNewsBySource,

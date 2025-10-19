@@ -14,6 +14,30 @@ const getAllNews = catchAsync(async (req, res) => {
   });
 });
 
+const getPopularNews = catchAsync(async (req: Request, res: Response) => {
+  const { limit } = req.query;
+  const news = await NewsFeedService.getPopularNews(limit ? Number(limit) : 20);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Popular news fetched successfully',
+    data: news,
+  });
+});
+
+const getTrendingNews = catchAsync(async (req, res) => {
+  const { limit } = req.query;
+  const news = await NewsFeedService.getTrendingNews(limit ? Number(limit) : 20);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Trending news fetched successfully',
+    data: news,
+  });
+});
+
 const getNewsBySource = catchAsync(async (req, res) => {
   const { source } = req.params;
   const { limit } = req.query;
@@ -84,6 +108,31 @@ const trackNewsClick = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "Click tracked",
+    data: null,
+  });
+});
+
+const trackNewsBookmark = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const { bookmarked } = req.body;
+  await NewsFeedService.trackBookmark(id, bookmarked);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Bookmark tracked",
+    data: null,
+  });
+});
+
+const trackNewsShare = catchAsync(async (req, res) => {
+    const { id } = req.params;
+  await NewsFeedService.trackShare(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Share tracked",
     data: null,
   });
 });
