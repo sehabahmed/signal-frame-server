@@ -272,10 +272,38 @@ const deleteOldNews = async (daysOld: 30): Promise<void> => {
   console.log(`Deleted ${result.deletedCount} old news items`);
 };
 
+// Get statistics about stored news
+const getNewsStatistics = async (): Promise<Record<string, unknown>> => {
+  const totalNews = await NewsFeed.countDocuments();
+  const sourceStats = await NewsFeed.aggregate([
+    {
+      $group: {
+        _id: "$source",
+        count: { $sum: 1 },
+        latestFeetch: { $max: "$fetchedAt" },
+      },
+    },
+    {
+      $sort: { count: -1 },
+    },
+  ]);
+
+  return {
+    totalNews,
+    sourceStats,
+    lastUpdated: new Date(),
+  };
+};
+
 export const NewsFeedService = {
+  updatePopularityScores,
+  trackView,
+  trackClick,
+
   fetchAllNews,
   saveNewsItems,
   getNewsFeed,
   getNewsBySource,
   deleteOldNews,
+  getNewsStatistics,
 };

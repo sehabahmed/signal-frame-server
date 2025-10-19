@@ -42,8 +42,24 @@ const refreshNews = catchAsync(async (req, res) => {
   });
 });
 
+const updateScores = catchAsync(async (req, res) => {
+  await NewsFeedService.updatePopularityScores();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Popularity scores updated successfully",
+    data: null,
+  });
+});
+
+
+
+
+
 export const NewsFeedControllers = {
     getAllNews,
     getNewsBySource,
     refreshNews,
+    updateScores,
 }
