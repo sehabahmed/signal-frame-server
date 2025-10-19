@@ -7,6 +7,17 @@ export const startNewsFeedScheduler = () => {
     console.log("Running Scheduled news fetch...");
 
     await NewsFeedService.fetchAllNews();
+  });
+
+  // Update popularity scores every hour
+  cron.schedule("0 * * * *", async () => {
+    console.log("Scheduled: Updating scores...");
+    await NewsFeedService.updatePopularityScores();
+  });
+
+  // Delete old news daily at 1 AM
+  cron.schedule("0 1 * * *", async () => {
+    console.log("Scheduled: Cleaning old news...");
     await NewsFeedService.deleteOldNews(30);
   });
 
