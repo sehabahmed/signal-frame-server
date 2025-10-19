@@ -299,7 +299,8 @@ export const NewsFeedService = {
   updatePopularityScores,
   trackView,
   trackClick,
-
+  trackBookmark,
+  trackShare,  
   fetchAllNews,
   saveNewsItems,
   getNewsFeed,

@@ -53,13 +53,46 @@ const updateScores = catchAsync(async (req, res) => {
   });
 });
 
+const getStatistics = catchAsync(async (req, res) => {
+  const stats = await NewsFeedService.getNewsStatistics();
 
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Statistics retrieved successfully",
+    data: stats,
+  });
+});
 
+const trackNewsView = catchAsync(async (req, res) => {
+    const { id } = req.params;
+  await NewsFeedService.trackView(id);
 
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "View tracked",
+    data: null,
+  });
+});
+
+const trackNewsClick = catchAsync(async (req, res) => {
+    const { id } = req.params;
+  await NewsFeedService.trackClick(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Click tracked",
+    data: null,
+  });
+});
 
 export const NewsFeedControllers = {
-    getAllNews,
-    getNewsBySource,
-    refreshNews,
-    updateScores,
-}
+  getAllNews,
+  getNewsBySource,
+  refreshNews,
+  updateScores,
+  getStatistics,
+  trackNewsView,
+};
