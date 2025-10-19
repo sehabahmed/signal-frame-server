@@ -42,7 +42,7 @@ const calculatePopularityScore = (news: TNewsItem): number => {
 
 // Calculate engagemenet  from external sources
 
-const calculateSourceEngament = (news: TNewsItem): number => {
+const calculateSourceEngagement = (news: TNewsItem): number => {
   const { upvotes = 0, comments = 0, shares = 0 } = news.popularity || {};
 
   // Differenet sources have different engagement scales
@@ -179,19 +179,19 @@ const trackShare = async (newsId: string): Promise<void> => {
 const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
   for (const item of items) {
     try {
-        //calculate initial popularity score
-        item.popularity = item.popularity || {
-            score: 0,
-            views: 0,
-            clicks: 0,
-            shares: 0,
-            bookmarks: 0,
-            comments: 0,
-            upvotes: 0,
-            lastCalculated: new Date(),
-        }
+      //calculate initial popularity score
+      item.popularity = item.popularity || {
+        score: 0,
+        views: 0,
+        clicks: 0,
+        shares: 0,
+        bookmarks: 0,
+        comments: 0,
+        upvotes: 0,
+        lastCalculated: new Date(),
+      };
 
-        item.popularity.score = calculatePopularityScore(item)
+      item.popularity.score = calculatePopularityScore(item);
 
       await NewsFeed.updateOne(
         { externalId: item.externalId, source: item.source },
@@ -235,6 +235,21 @@ const getNewsFeed = async (
     .fields();
 
   return await newsQuery.modelQuery;
+};
+
+// Get popular news items
+const getPopularNews = async (limit = 20): Promise<TNewsItem[]> => {
+  return await NewsFeed.find({}).sort({ "popularity.score": -1 }).limit(limit);
+};
+
+// Get trending news (high engagement in last 24 hours)
+const getTrendingNews = async (limit = 20): Promise<TNewsItem[]> => {
+  const yesterday = new Date();
+  yesterday.setHours(yesterday.getHours() - 24);
+
+  return await NewsFeed.find({ publishedAt: { $gte: yesterday } })
+    .sort({ "popularity.score": -1 })
+    .limit(limit);
 };
 
 // Get News by specific source
