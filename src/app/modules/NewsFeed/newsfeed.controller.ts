@@ -14,7 +14,7 @@ const getAllNews = catchAsync(async (req, res) => {
   });
 });
 
-const getPopularNews = catchAsync(async (req: Request, res: Response) => {
+const getPopularNews = catchAsync(async (req, res) => {
   const { limit } = req.query;
   const news = await NewsFeedService.getPopularNews(limit ? Number(limit) : 20);
 
@@ -139,9 +139,14 @@ const trackNewsShare = catchAsync(async (req, res) => {
 
 export const NewsFeedControllers = {
   getAllNews,
+  getPopularNews,
+  getTrendingNews,
   getNewsBySource,
   refreshNews,
   updateScores,
   getStatistics,
   trackNewsView,
+  trackNewsClick,
+  trackNewsBookmark,
+  trackNewsShare,
 };

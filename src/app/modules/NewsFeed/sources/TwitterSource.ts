@@ -5,7 +5,7 @@ import { INewsSource, TNewsItem } from '../newsfeed.interface';
 export class TwitterSource implements INewsSource {
   private readonly bearerToken = process.env.TWITTER_BEARER_TOKEN;
   private readonly baseUrl = 'https://api.twitter.com/2';
-  private readonly usernames = ['doganuraldesign'];
+  private readonly usernames = ['doganuraldesign', 'TheAIColony'];
 
   getName() {
     return 'twitter' as const;
