@@ -18,7 +18,7 @@ export const startNewsFeedScheduler = () => {
   // Delete old news daily at 1 AM
   cron.schedule("0 1 * * *", async () => {
     console.log("Scheduled: Cleaning old news...");
-    await NewsFeedService.deleteOldNews(30);
+    await NewsFeedService.deleteOldNews(7);
   });
 
   console.log("News feed scheduler started");

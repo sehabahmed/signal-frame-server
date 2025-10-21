@@ -261,7 +261,7 @@ const getNewsBySource = async (
 };
 
 // Delete news older than specified days
-const deleteOldNews = async (daysOld: 30): Promise<void> => {
+const deleteOldNews = async (daysOld: 7): Promise<void> => {
   const cutoffDate = new Date();
   cutoffDate.setDate(cutoffDate.getDate() - daysOld);
 
