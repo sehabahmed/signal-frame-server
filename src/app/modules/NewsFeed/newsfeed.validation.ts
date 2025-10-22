@@ -1,16 +1,19 @@
 import { z } from "zod";
 
+const urlRegex =
+  /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w-./?%&=]*)?$/i;
+
 export const newsFeedValidationSchema = z.object({
   title: z.string().min(1, "Title is required"),
   content: z.string().min(1, "Content is required"),
-  url: z.string().url("Invalid URL").min(1, "URL is required"),
+  url: z.string().regex(urlRegex, "Invalid URL").min(1, "URL is required"),
 
-  source: z.enum(["hackernews", "tldr", "twitter"], {
-    required_error: "Source is required",
-  }),
+  source: z
+  .enum(["hackernews", "tldr", "twitter"])
+  .refine((val) => !!val, { message: "Source is required" }),
 
   author: z.string().optional(),
-  imageUrl: z.string().url("Invalid image URL").optional(),
+  imageUrl: z.string().regex(urlRegex, "Invalid URL").optional(),
 
   publishedAt: z
     .preprocess((val) => (val ? new Date(val as string) : undefined), z.date())
