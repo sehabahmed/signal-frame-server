@@ -1,7 +1,6 @@
 import { z } from "zod";
 
-const urlRegex =
-  /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w-./?%&=]*)?$/i;
+const urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w-./?%&=]*)?$/i;
 
 export const newsFeedValidationSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -9,8 +8,8 @@ export const newsFeedValidationSchema = z.object({
   url: z.string().regex(urlRegex, "Invalid URL").min(1, "URL is required"),
 
   source: z
-  .enum(["hackernews", "tldr", "twitter"])
-  .refine((val) => !!val, { message: "Source is required" }),
+    .enum(["hackernews", "tldr", "twitter"])
+    .refine((val) => !!val, { message: "Source is required" }),
 
   author: z.string().optional(),
   imageUrl: z.string().regex(urlRegex, "Invalid URL").optional(),
@@ -37,9 +36,13 @@ export const newsFeedValidationSchema = z.object({
       comments: z.number().default(0),
       upvotes: z.number().default(0),
       lastCalculated: z
-        .preprocess((val) => (val ? new Date(val as string) : new Date()), z.date())
+        .preprocess(
+          (val) => (val ? new Date(val as string) : new Date()),
+          z.date()
+        )
         .default(() => new Date()),
     })
+    .partial()
     .default({}),
 
   sourceMatrics: z
