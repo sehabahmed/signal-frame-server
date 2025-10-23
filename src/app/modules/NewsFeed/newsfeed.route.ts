@@ -22,11 +22,7 @@ router.post(
   NewsFeedControllers.refreshNews
 );
 router.post("/refresh/:source", NewsFeedControllers.refreshNews);
-router.post(
-  "/update-scores",
-  validateRequest(updateNewsFeedValidationSchema),
-  NewsFeedControllers.updateScores
-);
+router.post("/update-scores", NewsFeedControllers.updateScores);
 
 // Tracking endpoints
 router.post("/:id/view", NewsFeedControllers.trackNewsView);
