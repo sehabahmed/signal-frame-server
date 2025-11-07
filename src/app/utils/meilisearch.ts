@@ -1,7 +1,7 @@
 import { MeiliSearch } from "meilisearch";
 import config from "../config";
 import { TNewsItem } from "../modules/NewsFeed/newsfeed.interface";
-import { Types } from "mongoose";
+import { Document, Types } from "mongoose";
 
 const meiliClient = new MeiliSearch({
   host: config.meilisearch_host as string,
