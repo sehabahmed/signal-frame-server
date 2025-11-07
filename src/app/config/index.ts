@@ -13,4 +13,6 @@ export default {
   jwt_refresh_secret: process.env.JWT_REFRESH_SECRET,
   jwt_refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN,
   twitter_bearer_token: process.env.TWITTER_BEARER_TOKEN,
+  meilisearch_host: process.env.MEILISEARCH_HOST,
+  meilisearch_master_key: process.env.MEILISEARCH_MASTER_KEY,
 };
