@@ -1,4 +1,5 @@
 import { QueryBuilder } from "../../builder/QueryBuilder";
+import meiliClient from "../../utils/meilisearch";
 import { TNewsItem } from "./newsfeed.interface";
 import { NewsFeed } from "./newsfeed.model";
 import { NewsSourceFactory } from "./sources/NewsSourceFactory";
@@ -212,6 +213,9 @@ const fetchAllNews = async (): Promise<void> => {
   const results = await Promise.allSettled(
     sources.map((source) => source.fetch())
   );
+
+  meiliClient.index('TNewsItem').addDocuments([{}])
+
 
   let totalFetched = 0;
   for (const result of results) {

@@ -2,8 +2,7 @@ import express from "express";
 import { NewsFeedControllers } from "./newsfeed.controller";
 import { validateRequest } from "../../middlewares/validateRequest";
 import {
-  createNewsFeedValidationSchema,
-  updateNewsFeedValidationSchema,
+  createNewsFeedValidationSchema
 } from "./newsfeed.validation";
 
 const router = express.Router();
