@@ -15,16 +15,14 @@ export async function addDocumentToIndex(
 ) {
   const index = meiliClient.index(indexKey);
 
-  const { _id, title, content, url, source, author, popularity } = result;
+  const { _id, title, content, source, author, } = result;
 
   const document = {
     id: _id.toString(),
     title,
     content,
-    url,
     source,
-    author,
-    popularity,
+    author
   };
 
   try {

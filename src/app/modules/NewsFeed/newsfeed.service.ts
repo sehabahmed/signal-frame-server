@@ -214,7 +214,9 @@ const fetchAllNews = async (): Promise<void> => {
     sources.map((source) => source.fetch())
   );
 
-  meiliClient.index('TNewsItem').addDocuments([{}])
+  const { _id:, title, content, source, author } = results;
+
+  meiliClient.index('TNewsItem').addDocuments([{_id, title, content, source, author}])
 
 
   let totalFetched = 0;
