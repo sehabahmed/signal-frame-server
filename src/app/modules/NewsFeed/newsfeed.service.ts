@@ -194,11 +194,30 @@ const saveNewsItems = async (items: TNewsItem[]): Promise<void> => {
 
       item.popularity.score = calculatePopularityScore(item);
 
-      await NewsFeed.updateOne(
+      const result = await NewsFeed.updateOne(
         { externalId: item.externalId, source: item.source },
         item,
         { upsert: true }
       );
+      if (result.upsertedId || result.modifiedCount > 0) {
+        const savedItem = await NewsFeed.findOne({
+          externalId: item.externalId,
+          source: item.source,
+        });
+        if (savedItem) {
+          const { _id, title, content, source, author } = savedItem;
+
+          await meiliClient.index("news").addDocuments([
+            {
+              _id: _id.toString(),
+              title,
+              content,
+              source,
+              author: author || "",
+            },
+          ]);
+        }
+      }
     } catch (error) {
       console.error("Error saving news item:", error);
     }
@@ -213,11 +232,6 @@ const fetchAllNews = async (): Promise<void> => {
   const results = await Promise.allSettled(
     sources.map((source) => source.fetch())
   );
-
-  const { _id:, title, content, source, author } = results;
-
-  meiliClient.index('TNewsItem').addDocuments([{_id, title, content, source, author}])
-
 
   let totalFetched = 0;
   for (const result of results) {
@@ -306,7 +320,7 @@ export const NewsFeedService = {
   trackView,
   trackClick,
   trackBookmark,
-  trackShare,  
+  trackShare,
   fetchAllNews,
   getPopularNews,
   getTrendingNews,
