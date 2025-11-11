@@ -17,10 +17,8 @@ router.get("/source/:source", NewsFeedControllers.getNewsBySource);
 // Post endpoints
 router.post(
   "/refresh",
-  validateRequest(createNewsFeedValidationSchema),
   NewsFeedControllers.refreshNews
 );
-router.post("/refresh/:source", NewsFeedControllers.refreshNews);
 router.post("/update-scores", NewsFeedControllers.updateScores);
 
 // Tracking endpoints

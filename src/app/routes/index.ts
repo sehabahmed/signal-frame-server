@@ -15,7 +15,7 @@ const moduleRoutes = [
     route: UserRoutes,
   },
   {
-    path: "/news-feed",
+    path: "/news",
     route: NewsFeedRoutes,
   },
 ];
